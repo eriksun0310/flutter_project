@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_complete_guide1/answer.dart';
+import 'package:flutter_complete_guide1/question.dart';
 
 void main() {
   runApp(const MaterialApp(home: MyApp()));
@@ -13,34 +15,43 @@ class MyApp extends StatefulWidget {
     return _MyAppState();
   }
 }
+
 //_:前置下滑線, 用來表示私有性
 class _MyAppState extends State<MyApp> {
-  var questionIndex = 0;
+  var _questionIndex = 0;
 
-  void answerQuestion() {
-    if (questionIndex < 1) {
+  final questions = [
+    {
+      'questionText': 'What\'s your favorite color?',
+      'answers': ['Black', 'Red', 'Green', 'White']
+    },
+    {
+      'questionText': 'What\'s your favorite animal?',
+      'answers': ['Rabbit', 'Snake', 'Elephant', 'Lion']
+    },
+  ];
+
+  void _answerQuestion() {
+    if (_questionIndex < questions.length-1) {
       setState(() {
-        questionIndex = questionIndex + 1;
+        _questionIndex = _questionIndex + 1;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      'What\'s your favorite color?',
-      'What\'s your favorite animal?'
-    ];
     return Scaffold(
         appBar: AppBar(
           title: const Text('My First App'),
         ),
         body: Column(
           children: [
-            Text(questions[questionIndex]),
-            ElevatedButton(child: Text('Answer 1'), onPressed: answerQuestion),
-            ElevatedButton(child: Text('Answer 2'), onPressed: answerQuestion),
-            ElevatedButton(child: Text('Answer 3'), onPressed: answerQuestion),
+            Question(questions[_questionIndex]['questionText'] as String),
+            ...(questions[_questionIndex]['answers'] as List<String>)
+                .map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList(),
           ],
         ));
   }
