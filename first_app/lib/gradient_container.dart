@@ -1,3 +1,4 @@
+import 'package:first_app/dice_roller.dart';
 import 'package:flutter/material.dart';
 
 // 用 const 保證它永遠不會被重新分配
@@ -22,9 +23,7 @@ class GradientContainer extends StatelessWidget {
               colors: [colors1, colors2],
               begin: startAlignment,
               end: endAlignment)),
-      child: Center(
-        child: Image.asset('assets/images/dice-2.png'),
-      ),
+      child: const Center(child: DiceRoller()),
     );
   }
 }
