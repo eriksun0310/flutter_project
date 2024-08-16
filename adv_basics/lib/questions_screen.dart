@@ -16,19 +16,19 @@ class QuestionsScreen extends StatefulWidget {
 
 class _QuestionsScreenState extends State<QuestionsScreen> {
   // build方法外部:狀態和函數會保持不變,只有在 widget 被創建時執行一次,直到widget被銷毀
-  var questionIndex = 0;
+  var currentQuestionIndex = 0;
 
   void answerQuestion(String selectedAnswer) {
     widget.onSelectedAnswers(selectedAnswer);
     setState(() {
-      questionIndex += 1;
+      currentQuestionIndex++;
     });
   }
 
   //build 方法內部:會在每次重建時執行
   @override
   Widget build(content) {
-    final currentQuestion = questions[questionIndex];
+    final currentQuestion = questions[currentQuestionIndex];
     // print('currentQuestion', currentQuestion);
     return SizedBox(
       width: double.infinity,
