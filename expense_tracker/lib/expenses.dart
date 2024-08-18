@@ -1,3 +1,4 @@
+import 'package:expense_tracker/expenses_list.dart';
 import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +22,12 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(context) {
-    return const Scaffold(
-      body: Column(children: [Text('char'), Text('expense')]),
+    return Scaffold(
+      body: Column(children: [
+        const Text('char'),
+        //Expanded:自動調整大小以填充剩餘的空間
+        Expanded(child: ExpensesList(expenses: _registeredExpenses))
+      ]),
     );
   }
 }
