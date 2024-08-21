@@ -26,8 +26,26 @@ class _ExpensesState extends State<Expenses> {
         category: Category.food)
   ];
 
+  //新增費用
+  void _addExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.add(expense);
+    });
+  }
+
+  //移除費用
+  void _removeExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+  }
+
+//開啟 新增費用的modal
   void _openAddExpenseOverlay() {
-    showModalBottomSheet(context: context, builder: (ctx) => NewExpense());
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (ctx) => NewExpense(onAddExpense: _addExpense));
   }
 
   @override
@@ -43,7 +61,9 @@ class _ExpensesState extends State<Expenses> {
       body: Column(children: [
         const Text('The char'),
         //Expanded:自動調整大小以填充剩餘的空間
-        Expanded(child: ExpensesList(expenses: _registeredExpenses))
+        Expanded(
+            child: ExpensesList(
+                expenses: _registeredExpenses, onRemoveExpense: _removeExpense))
       ]),
     );
   }
