@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:expense_tracker/models/expense.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -36,20 +39,23 @@ class _NewExpenseState extends State<NewExpense> {
     });
   }
 
-  //送出一筆金額
-  void _submitExpenseData() {
-    // double.tryParse():string轉number
-    final enteredAmount = double.tryParse(_amountController
-        .text); // tryParse('Hello') => null、tryParse('12.11')=>12.11
-
-    //amount驗證
-    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
-
-    //如果其中一項未填,則跳 提示訊息modal
-    if (_titleController.text.trim().isEmpty ||
-        amountIsInvalid ||
-        _selectedDate == null) {
-      //跳出 提示訊息modal
+  void _showDialog() {
+    if (Platform.isIOS) {
+      showCupertinoDialog(
+          context: context,
+          builder: (ctx) => CupertinoAlertDialog(
+                title: const Text('Invalid input'),
+                content: const Text(
+                    'Please make sure a valid title, amount, date and category was entered.'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(ctx); // 關閉 提示訊息modal
+                      },
+                      child: const Text('Okay'))
+                ],
+              ));
+    } else {
       showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
@@ -64,6 +70,24 @@ class _NewExpenseState extends State<NewExpense> {
                       child: const Text('Okay'))
                 ],
               ));
+    }
+  }
+
+  //送出一筆金額
+  void _submitExpenseData() {
+    // double.tryParse():string轉number
+    final enteredAmount = double.tryParse(_amountController
+        .text); // tryParse('Hello') => null、tryParse('12.11')=>12.11
+
+    //amount驗證
+    final amountIsInvalid = enteredAmount == null || enteredAmount <= 0;
+
+    //如果其中一項未填,則跳 提示訊息modal
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      //跳出 提示訊息modal
+      _showDialog();
       return;
     }
 
