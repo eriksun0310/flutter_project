@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:meals_app/widgets/Switch.dart';
 
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({super.key});
@@ -21,6 +22,11 @@ class _FilterScreenState extends State<FiltersScreen> {
       ),
       body: Column(
         children: [
+          SwitchWidget(
+            switchValue: _glutenFreeFilterSet,
+            switchTitle: 'Gluten-free',
+            switchSubTitle: 'Only include gluten-free meals.',
+          ),
           SwitchListTile(
             value: _glutenFreeFilterSet,
             onChanged: (isChecked) {
@@ -42,7 +48,7 @@ class _FilterScreenState extends State<FiltersScreen> {
                     .copyWith(color: Theme.of(context).colorScheme.onSurface)),
             activeColor: Theme.of(context).colorScheme.tertiary,
             contentPadding: const EdgeInsets.only(left: 34, right: 22),
-          )
+          ),
         ],
       ),
     );
