@@ -1,38 +1,33 @@
 import 'package:flutter/material.dart';
-class SwitchWidget extends StatefulWidget {
+
+class SwitchWidget extends StatelessWidget {
   SwitchWidget(
-      {Key? key,
+      {super.key,
       required this.switchValue,
       required this.switchTitle,
-      required this.switchSubTitle}) : super(key: key);
+      required this.switchSubTitle,
+      required this.onChange});
 
   bool switchValue; // 可變的布林值
   final String switchTitle;
   final String switchSubTitle;
-  @override
-  State<StatefulWidget> createState() {
-    return _SwitchState();
-  }
-}
+  final ValueChanged<bool> onChange; //變更switch state 的回調函數
 
-class _SwitchState extends State<SwitchWidget> {
   @override
   Widget build(BuildContext context) {
     return SwitchListTile(
-      value: widget.switchValue,
+      value: switchValue,
       onChanged: (isChecked) {
-        setState(() {
-          widget.switchValue = isChecked;
-        });
+        onChange(isChecked);
       },
       title: Text(
-        widget.switchTitle,
+        switchTitle,
         style: Theme.of(context)
             .textTheme
             .titleLarge!
             .copyWith(color: Theme.of(context).colorScheme.onSurface),
       ),
-      subtitle: Text(widget.switchSubTitle,
+      subtitle: Text(switchSubTitle,
           style: Theme.of(context)
               .textTheme
               .labelMedium!

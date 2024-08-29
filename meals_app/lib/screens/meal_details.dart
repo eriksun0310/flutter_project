@@ -1,27 +1,43 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_app/models/meals.dart';
+import 'package:meals_app/providers/favorites_provider.dart';
+// import 'package:meals_app/providers/favorites_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class MealDetailsScreen extends StatelessWidget {
+
+// StatelessWidget 如果要拿到 Riverpod 的ref 要變更 ConsumerWidget
+class MealDetailsScreen extends ConsumerWidget {
   const MealDetailsScreen({
     super.key,
     required this.meal,
-    required this.onToggleFavorite
   });
 
   final Meal meal;
-  final void Function(Meal meal) onToggleFavorite;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
-        actions: [IconButton(onPressed: () {
-          onToggleFavorite(meal);
-        }, icon: const Icon(Icons.star))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                // read 會取得當前狀態,不會重新建立新的狀態
+                final wasAdded = ref
+                    .read(favoriteMealsProvider.notifier)
+                    .toggleMealFavoriteStatus(meal);
+
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(wasAdded
+                        ? 'Meal added as a favorite'
+                        : 'Meal removed')));
+              },
+              icon: const Icon(Icons.star))
+        ],
       ),
       //SingleChildScrollView:單一的小部件需要滾動時
       //ListView:用於顯示大量項目
