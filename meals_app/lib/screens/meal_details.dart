@@ -7,7 +7,6 @@ import 'package:meals_app/providers/favorites_provider.dart';
 // import 'package:meals_app/providers/favorites_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-
 // StatelessWidget 如果要拿到 Riverpod 的ref 要變更 ConsumerWidget
 class MealDetailsScreen extends ConsumerWidget {
   const MealDetailsScreen({
@@ -19,13 +18,17 @@ class MealDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final favoriteMeals = ref.watch(favoriteMealsProvider);
+
+    final isFavorite = favoriteMeals.contains(meal);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
           IconButton(
               onPressed: () {
-                // read 會取得當前狀態,不會重新建立新的狀態
+                // read 會取得當前狀 態,不會重新建立新的狀態
                 final wasAdded = ref
                     .read(favoriteMealsProvider.notifier)
                     .toggleMealFavoriteStatus(meal);
@@ -36,7 +39,20 @@ class MealDetailsScreen extends ConsumerWidget {
                         ? 'Meal added as a favorite'
                         : 'Meal removed')));
               },
-              icon: const Icon(Icons.star))
+
+              //AnimatedSwitcher: 取決於是否需要 在不同的狀態下平滑的顯示不同的元件
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                transitionBuilder: (child, animation) {
+                  return RotationTransition(
+                      turns: Tween(begin: 0.8, end: 1.0).animate(animation),
+                      child: child);
+                },
+                child: Icon(
+                  isFavorite ? Icons.star : Icons.star_border,
+                  key: ValueKey(isFavorite),
+                ),
+              ))
         ],
       ),
       //SingleChildScrollView:單一的小部件需要滾動時
@@ -44,11 +60,14 @@ class MealDetailsScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Image.network(
-              meal.imageUrl,
-              height: 300,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            Hero(
+              tag: meal.id,
+              child: Image.network(
+                meal.imageUrl,
+                height: 300,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
             const SizedBox(
               height: 14,

@@ -33,14 +33,17 @@ class MealItem extends StatelessWidget {
         child: Stack(
           children: [
             //FadeInImage:圖片加載時顯示一個佔位符,圖片加載完成後淡入顯示實際圖片
-            FadeInImage(
-              // MemoryImage:是一個用於顯示圖像的類
-              //kTransparentImage:透明的圖像數據
-              placeholder: MemoryImage(kTransparentImage), //佔位符
-              image: NetworkImage(meal.imageUrl), // 主圖像
-              fit: BoxFit.cover, // 圖像填充方式
-              height: 200, // 高度
-              width: double.infinity, // 填滿父容器Card的寬度
+            Hero(
+              tag: meal.id,
+              child: FadeInImage(
+                // MemoryImage:是一個用於顯示圖像的類
+                //kTransparentImage:透明的圖像數據
+                placeholder: MemoryImage(kTransparentImage), //佔位符
+                image: NetworkImage(meal.imageUrl), // 主圖像
+                fit: BoxFit.cover, // 圖像填充方式
+                height: 200, // 高度
+                width: double.infinity, // 填滿父容器Card的寬度
+              ),
             ),
             Positioned(
                 bottom: 0,

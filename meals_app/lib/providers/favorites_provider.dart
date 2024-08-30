@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals_app/models/meals.dart';
 
 
-
 //StateNotifier:用於狀態管理 favorites 列表
 class FavoriteMealsNotifier extends StateNotifier<List<Meal>> {
   FavoriteMealsNotifier() : super([]);
@@ -28,3 +27,4 @@ final favoriteMealsProvider =
     StateNotifierProvider<FavoriteMealsNotifier, List<Meal>>((ref) {
   return FavoriteMealsNotifier();
 });
+
